@@ -25,6 +25,11 @@
 * La estimacion dependera del Tiempo y Calidad del Video y Audio (tamaño en Mb)
 * Esto No considera el tiempo que le tomara descargar el resultado a su PC o si lo dejara en su cuenta Drive
 
+# Tiempo v2
+* La version2 es mucho mas rapida, ya que descarga los archivos audio y video directamente sin bloques
+* este proceso de descarga en el ejemplo tarda solo 2 minutos para un video de 1Gb y audio de 230Mb
+* el proceso de conversion no ha sufrido cambios si que tardara dependiendo de la calidad y tiempo del video
+
 ---
 ==========================================================================================
 
