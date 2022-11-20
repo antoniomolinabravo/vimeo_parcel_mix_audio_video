@@ -1,20 +1,24 @@
 # vimeo_parcel_mix_audio_video
 
-1. Para el proceso solo se requiere contar con el link del master.json
+1. Para el proceso solo se requiere contar con el link del master.json que debe ser pegado en el codigo *master_json_url*
 1. El proceso tomara el video y el audio de mas alta resolucion y calidad
-1. Posteriormente los unira en un solo result.mp4
-1. Borrando los otros dos archivos temporales
+1. Posteriormente los unira en un solo archivo ==> result.mp4
+1. Borrando los otros dos archivos temporales para liberar espacio
 
 ##  Obtener el Link del master.json
 
 ### Opcion #1
-* Seleccionar el Video hacer [PLAY] y seleccionar en menu contextual [INSPECCIONAR]
+* seleccionar el Video hacer [PLAY] poner [PAUSA] y seleccionar en menu contextual [INSPECCIONAR]
 * buscar el primer <script>..</script>
 * buscar master.json
 * copiar la ruta completa
+* se vera como el siguiente ej: 
+```
+https://91vod-adaptive.akamaized.net/exp=1668939686~acl=%2F842360cb-7711-4e48-9bd5-144e4686a2e2%2F%2A~hmac=a982f9ed2cc1e2fc7c61201f9997e0262917b13a89494c4169e4b3848d148f59/842360cb-7711-4e48-9bd5-144e4686a2e2/sep/video/e524c67d,336fea7d,5e87cb6d,306933cc,d42a911f/audio/ebb79ef9,7c03de6a,cad3266d/master.json?query_string_ranges=1&base64_init=1
+```
 
 ### Opcion #2
-* Seleccionar el Video hacer [PLAY] y seleccionar en menu contextual [INSPECCIONAR]
+* Seleccionar el Video hacer [PLAY] poner [PAUSA] y seleccionar en menu contextual [INSPECCIONAR]
 * ir al panel [NETWORK] donde iran apareciendo la lista de solicitudes y respuestas
 * tomar una y copiar el link
 * reemplazar el archivo por master.json?query_string_ranges=1&base64_init=1
@@ -237,4 +241,61 @@ Tambien lo encontrara en otro segmento del SCRIPT como:
 ,{"profile":"c3347cdf-6c91-4ab3-8d56-737128e7a65f","quality":"360p","id":"5e87cb6d-099f-494c-acb5-00243ffc44ed","fps":25}
 ,{"profile":"5ff7441f-4973-4241-8c2e-976ef4a572b0","quality":"1080p","id":"306933cc-6bcb-4333-a643-8a43f0b1d189","fps":25}
 ,{"profile":"f3f6f5f0-2e6b-4e90-994e-842d1feeabc0","quality":"720p","id":"d42a911f-6702-44b3-8420-85caa5112835","fps":25}]
+```
+
+
+---
+
+* MASTER JSON 
+
+1.  Contiene informacion de los formatos disponibles de audio y video
+1.  Las listas pre calculadas de bloques por cada formato
+1.  Archivo muy extenso
+
+2.  inicia con el clip_id que es el acl
+1.  le sigue la base_url, que es el retroceso hasta antes del /sep/ y lo reemplaza por /parcel/
+
+3.  luego describe la lista de formatos y sus caracteristicas, en este ejemplo se ve solo el primero
+1.  le sigue el init_segment, no util para nosotros
+1.  el index_segment es el inicio del video o audio
+1.  luego los segments donde detalla cada bloque y su rango
+1.  cada segmento indica su inicio y fin en tiempo y el tamaño que acumulan hasta ese punto
+
+Ej. un fragmento
+
+```
+{"clip_id":"842360cb-7711-4e48-9bd5-144e4686a2e2","base_url":"../../../../../parcel/"
+,"video":
+[{"id":"e524c67d","base_url":"video/","format":"dash"
+,"mime_type":"video/mp4","codecs":"avc1.64001F"
+,"bitrate":1115000,"avg_bitrate":344000,"duration":10473
+,"framerate":25,"width":960,"height":540,"max_segment_duration":8
+,"init_segment":"AAAAIGZ0eXBkYXNoAAAAAGRhc2htcDQybXA0MWlzbzYAAAMibW9vdgAAAGxtdmhkAAAAAN+Zv6rfmb+qAAAAGQAAAAAAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAACFpb2RzAAAAABCAgIAQAE////9//w6AgIAEAAAAAQAAAlF0cmFrAAAAXHRraGQAAAAH35m/qt+Zv6oAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAA8AAAAIcAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAAAAAAAAwABAAAAAAHJbWRpYQAAACBtZGhkAAAAAN+Zv6rfmb+qAAAAGQAAAABVxAAAAAAANmhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABMLVNNQVNIIFZpZGVvIEhhbmRsZXIAAAABa21pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAStzdGJsAAAAs3N0c2QAAAAAAAAAAQAAAKNhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA8ACHABIAAAASAAAAAAAAAABCkFWQyBDb2RpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAAAOmF2Y0MBZAAf/+EAHWdkAB+sViQPARfuagwMDIAAAAMAgAAAGQeMGMTAAQAGaOiOyyLA/fj4AAAAABNjb2xybmNseAAGAAYABgAAAAAQc3R0cwAAAAAAAAAAAAAAEHN0c2MAAAAAAAAAAAAAABRzdHN6AAAAAAAAAAAAAAAAAAAAEHN0Y28AAAAAAAAAAAAAABhzZ3BkAQAAAHJvbGwAAAACAAAAAAAAABRzYmdwAAAAAHJvbGwAAAAAAAAAPG12ZXgAAAAUbWVoZAEAAAAAAAAAAAP+wQAAACB0cmV4AAAAAAAAAAEAAAABAAAAAQAAAAAAAQAA"
+,"index_segment":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=834-21805"
+,"segments":
+[{"start":0,"end":6.08,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=21806-35425","size":13619}
+,{"start":6.08,"end":12.16,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=35426-126616","size":91190}
+,{"start":12.16,"end":18.24,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=126617-362623","size":236006}
+,{"start":18.24,"end":24.32,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=362624-447116","size":84492}
+,{"start":24.32,"end":30.4,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=447117-546643","size":99526}
+,{"start":30.4,"end":36.48,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=546644-652721","size":106077}
+,{"start":36.48,"end":42.56,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=652722-749681","size":96959}
+,{"start":42.56,"end":48.64,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=749682-907585","size":157903}
+,{"start":48.64,"end":54.72,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=907586-1030805","size":123219}
+,{"start":54.72,"end":60,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1030806-1137670","size":106864}
+,{"start":60,"end":66.08,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1137671-1255762","size":118091}
+,{"start":66.08,"end":72.16,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1255763-1356863","size":101100}
+,{"start":72.16,"end":78.24,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1356864-1480061","size":123197}
+,{"start":78.24,"end":84.32,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1480062-1663879","size":183817}
+,{"start":84.32,"end":90.4,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1663880-1850423","size":186543}
+,{"start":90.4,"end":96.48,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=1850424-2076200","size":225776}
+,{"start":96.48,"end":102.56,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=2076201-2297828","size":221627}
+,{"start":102.56,"end":108.64,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=2297829-2535139","size":237310}
+,{"start":108.64,"end":114.72,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=2535140-2785899","size":250759}
+,{"start":114.72,"end":120,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=2785900-2997033","size":211133}
+,{"start":120,"end":126.08,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=2997034-3196278","size":199244}
+,{"start":126.08,"end":132.16,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=3196279-3411175","size":214896}
+,{"start":132.16,"end":138.24,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=3411176-3652675","size":241499}
+,{"start":138.24,"end":144.32,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=3652676-3992495","size":339819}
+,{"start":144.32,"end":150.4,"url":"e524c67d.mp4?r=dXMtZWFzdDE%3D\u0026range=3992496-4210143","size":217647}
 ```
